@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function tongCacUoc(num) {
+        let sum = 0;
+        for (let i = 1; i <= num / 2; i++) {
+            if (num % i === 0) {
+                sum += i;
+            }
+        }
+        return sum;
+    }
+
+    function capSoThanThiet(num1, num2) {
+        const sum1 = tongCacUoc(num1);
+        const sum2 = tongCacUoc(num2);
+
+
+        return sum1 === num2 && sum2 === num1;
+    }
+
+
+    document.write(capSoThanThiet(220, 284) + `<br>`);
+    document.write(capSoThanThiet(123, 456));
+
+
+</script>
+
+</body>
+</html>

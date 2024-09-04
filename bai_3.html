@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý danh sách sách</title>
+</head>
+<body>
+<h1>Quản lí sách</h1>
+<table id="table"></table>
+
+<button onclick="themSachDaCo()">Thêm sách đã có</button>
+<button onclick="themSachMoi()">Thêm sách mới</button>
+<button onclick="muonSach()">Mượn sách</button>
+<button onclick="hienThiSachNhieuNhat()">Hiển thị sách nhiều nhất</button>
+
+<script>
+    class Sach {
+        constructor(maSach, tenSach, namXuatBan, soQuyen) {
+            this.maSach = maSach;
+            this.tenSach = tenSach;
+            this.namXuatBan = namXuatBan;
+            this.soQuyen = soQuyen;
+            this.status = this.getStatus();  // Cập nhật trạng thái khi khởi tạo
+        }
+
+        getMaSach() {
+            return this.maSach;
+        }
+
+        getTenSach() {
+            return this.tenSach;
+        }
+
+        getNamXuatBan() {
+            return this.namXuatBan;
+        }
+
+        getSoQuyen() {
+            return this.soQuyen;
+        }
+
+        getStatus() {
+            return this.soQuyen > 0;  // Trả về true nếu số lượng sách > 0, false nếu không
+        }
+
+        setMaSach(maSach) {
+            this.maSach = maSach;
+        }
+
+        setTenSach(tenSach) {
+            this.tenSach = tenSach;
+        }
+
+        setNamXuatBan(namXuatBan) {
+            this.namXuatBan = namXuatBan;
+        }
+
+        setSoQuyen(soQuyen) {
+            this.soQuyen = soQuyen;
+            this.status = this.getStatus();  // Cập nhật trạng thái sau khi thay đổi số lượng sách
+        }
+    }
+
+    let SachMonHoc = [
+        new Sach('12345', 'Toán', '2000', 3),
+        new Sach('23456', 'Văn', '1998', 4),
+        new Sach('37456', 'Tiếng Anh', '1999', 5),
+    ];
+
+    function hienThiSach() {
+        let listSach = `<tr>
+                            <th>Mã số sách</th>
+                            <th>Tên sách</th>
+                            <th>Năm xuất bản</th>
+                            <th>Số quyển</th>
+                            <th>Tình trạng</th>
+                        </tr>`;
+        for (let i = 0; i < SachMonHoc.length; i++) {
+            listSach += `<tr>
+                            <td>${SachMonHoc[i].maSach}</td>
+                            <td>${SachMonHoc[i].tenSach}</td>
+                            <td>${SachMonHoc[i].namXuatBan}</td>
+                            <td>${SachMonHoc[i].soQuyen}</td>
+                            <td>${SachMonHoc[i].getStatus() ? true : false}</td>
+                         </tr>`;
+        }
+        document.getElementById('table').innerHTML = listSach;
+    }
+
+    function themSachMoi() {
+        let maSach = prompt('Nhập mã sách mới');
+        let tenSach = prompt('Nhập tên sách mới');
+        let namXuatBan = prompt('Nhập năm xuất bản');
+
+        // Kiểm tra năm xuất bản hợp lệ
+        while (namXuatBan > 9999 || namXuatBan < 0) {
+            namXuatBan = prompt("Nhập lại năm xuất bản cho đúng!");
+        }
+
+        let soQuyen = parseInt(prompt('Nhập số quyển sách'));
+
+        // Thêm sách mới vào danh sách
+        if (soQuyen > 0) {
+            let sachMoi = new Sach(maSach, tenSach, namXuatBan, soQuyen);
+            SachMonHoc.push(sachMoi);  // Thêm sách mới vào danh sách
+            hienThiSach();  // Hiển thị danh sách sách sau khi thêm mới
+        } else {
+            alert("Số lượng sách phải lớn hơn 0.");
+        }
+    }
+
+    function themSachDaCo() {
+        let maSach = prompt('Nhập mã sách cần thêm');
+        let soQuyen = parseInt(prompt('Nhập số quyển sách muốn thêm'), 10);
+
+        // Tìm sách theo mã sách
+        let sach = SachMonHoc.find(s => s.maSach === maSach);
+
+        if (sach) {
+            if (soQuyen > 0) {
+                sach.setSoQuyen(sach.getSoQuyen() + soQuyen);  // Cập nhật số lượng sách
+                hienThiSach();  // Hiển thị danh sách sách sau khi cập nhật
+            } else {
+                alert("Số lượng sách phải lớn hơn 0.");
+            }
+        } else {
+            alert("Không tìm thấy sách với mã đã nhập.");
+        }
+    }
+
+
+    hienThiSach();  // Hiển thị danh sách sách ban đầu khi tải trang
+</script>
+</body>
+</html>
